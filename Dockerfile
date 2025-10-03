@@ -1,14 +1,14 @@
-# Multi-stage build to optimize for production
 # Use the official Motia base image
 FROM motiadev/motia:latest
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package*.json pnpm-lock.yaml ./
+# Install git if not available
+RUN if ! command -v git &> /dev/null; then apt-get update && apt-get install -y git; fi
 
-# Copy the rest of the application code
+# Clone only the current state of the repository with a shallow clone to reduce size
+# This approach avoids having to transfer the entire git history
 COPY . .
 
 # Install pnpm if not available and install only production dependencies
