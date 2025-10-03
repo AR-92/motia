@@ -7,18 +7,17 @@ WORKDIR /app
 # Copy all application files
 COPY . .
 
-# Install pnpm and dependencies in a single step to avoid PATH issues
-RUN npm install -g pnpm && \
-    pnpm install --frozen-lockfile --prod
+# Install dependencies using npx pnpm to avoid PATH issues
+RUN npx pnpm install --frozen-lockfile --prod
 
 # Build the application
-RUN pnpm run build
+RUN npx pnpm run build
 
 # Change to playground directory where the app runs
 WORKDIR /app/playground
 
 # Install playground dependencies
-RUN pnpm install --frozen-lockfile --prod
+RUN npx pnpm install --frozen-lockfile --prod
 
 # Install any additional dependencies required by Motia
 RUN npx motia install
