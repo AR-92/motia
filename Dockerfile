@@ -4,7 +4,9 @@ FROM motiadev/motia:latest
 # Set working directory
 WORKDIR /app
 
-# Install pnpm since it's not available in the base image
+# Install pnpm since it's not available in the base image and update PATH
+ENV PNPM_HOME="/root/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install -g pnpm
 
 # Copy all application files
