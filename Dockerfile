@@ -10,18 +10,17 @@ COPY . .
 # Temporarily disable postinstall scripts to avoid the motia install issue during dependency installation
 ENV NPM_CONFIG_IGNORE_SCRIPTS=true
 
-# Install pnpm if not available and install dependencies
-RUN if ! command -v pnpm &> /dev/null; then npm install -g pnpm; fi && \
-    npx pnpm install --frozen-lockfile --prod
+# Install dependencies using npx pnpm to ensure consistent availability
+RUN npx pnpm install --frozen-lockfile --prod
 
-# Build the application
-RUN if command -v pnpm &> /dev/null; then pnpm run build; else npx pnpm run build; fi
+# Build the application using npx pnpm
+RUN npx pnpm run build
 
 # Change to playground directory where the app runs
 WORKDIR /app/playground
 
 # Install playground dependencies without running scripts
-RUN if command -v pnpm &> /dev/null; then pnpm install --frozen-lockfile --prod; else npx pnpm install --frozen-lockfile --prod; fi
+RUN npx pnpm install --frozen-lockfile --prod
 
 # Set the working directory back to root app
 WORKDIR /app
